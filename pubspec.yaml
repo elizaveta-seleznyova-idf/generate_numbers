@@ -29,8 +29,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  domain:
-    path: packages/domain
   presentation:
     path: packages/presentation
 
