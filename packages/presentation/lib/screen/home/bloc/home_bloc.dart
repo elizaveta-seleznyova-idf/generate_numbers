@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:domain/models/check_number_params.dart';
 import 'package:domain/usecase/generate_number_usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,6 +14,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final blocCheckUseCase = CheckNumberUseCase();
   final blocGenerateUseCase = GenerateNumberUseCase();
   final Random random = Random();
+  final nullingAttempts = 0;
 
   HomeBloc() : super(const HomeState()) {
     on<GenerateNumberEvent>(_generate);
@@ -28,7 +30,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(
       state.copyWith(
         generatedNumber: generatedNumber,
-        attempts: 0,
+        attempts: nullingAttempts,
         gameState: GameState.inGame,
       ),
     );

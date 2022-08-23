@@ -1,11 +1,6 @@
+import 'package:domain/models/check_number_params.dart';
 import 'usecase.dart';
 
-class CheckNumberParams {
-  final int generatedNumber;
-  final int predictedNumber;
-
-  CheckNumberParams(this.generatedNumber, this.predictedNumber);
-}
 
 class CheckNumberUseCase implements UseCaseParams<CheckNumberParams, bool> {
   @override
