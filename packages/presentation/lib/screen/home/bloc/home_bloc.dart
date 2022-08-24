@@ -11,12 +11,15 @@ part 'home_event.dart';
 part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  final blocCheckUseCase = CheckNumberUseCase();
-  final blocGenerateUseCase = GenerateNumberUseCase();
+  final CheckNumberUseCase blocCheckUseCase;
+  final GenerateNumberUseCase blocGenerateUseCase;
   final Random random = Random();
   final nullingAttempts = 0;
 
-  HomeBloc() : super(const HomeState()) {
+  HomeBloc({
+    required this.blocGenerateUseCase,
+    required this.blocCheckUseCase,
+  }) : super(const HomeState()) {
     on<GenerateNumberEvent>(_generate);
     on<SubmitNumberEvent>(_submit);
     on<ChangeSubmitButtonStateEvent>(_changeSubmitButton);
@@ -47,10 +50,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       );
       final isNumberGuessed = blocCheckUseCase.call(checkParams);
       final attempts = state.attempts + 1;
+      final checkAttempts = attempts >= 3 ? GameState.lose : GameState.inGame;
+      final gameState = isNumberGuessed ? GameState.win : checkAttempts;
       emit(
         state.copyWith(
           attempts: attempts,
-          gameState: isNumberGuessed ? GameState.win : attempts >=3 ? GameState.lose : GameState.inGame,
+          gameState: gameState,
         ),
       );
     }
