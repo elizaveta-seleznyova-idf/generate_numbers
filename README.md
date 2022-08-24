@@ -1,6 +1,6 @@
-# untitled
+# generate_numbers
 
-A new Flutter project.
+Game for guessing the generated number.
 
 ## Getting Started
 
