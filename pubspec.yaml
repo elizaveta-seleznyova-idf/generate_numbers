@@ -1,5 +1,5 @@
-name: untitled
-description: A new Flutter project.
+name: generate_numbers
+description: Game for guessing the generated number.
 publish_to: 'none'
 
 version: 1.0.0+1

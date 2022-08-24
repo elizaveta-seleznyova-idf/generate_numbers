@@ -108,6 +108,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 const SizedBox(height: 15),
                 TextFormField(
+                  keyboardType: TextInputType.number,
                   maxLength: 1,
                   controller: _controller,
                   decoration: const InputDecoration(
