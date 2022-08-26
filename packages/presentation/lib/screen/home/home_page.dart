@@ -112,7 +112,6 @@ class _HomePageState extends BlocScreenState<HomePage, HomeBloc> {
                         labelText: 'Number?',
                       ),
                       onChanged: (value) {
-                        //value.isNotEmpty ? bloc.submit(int.parse(value)) : null;
                         bloc.changeSubmitButton(value.isNotEmpty);
                       },
                     ),
