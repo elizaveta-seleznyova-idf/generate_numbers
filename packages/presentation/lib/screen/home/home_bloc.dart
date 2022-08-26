@@ -58,7 +58,7 @@ class HomeBlocImpl extends BlocImpl implements HomeBloc {
 
   @override
   void generate() {
-    final generatedNumber = blocGenerateUseCase.call();
+    final generatedNumber = blocGenerateUseCase();
     _state.generatedNumber = generatedNumber;
     _state.attempts = nullingAttempts;
     _state.gameState = GameState.inGame;
@@ -75,7 +75,7 @@ class HomeBlocImpl extends BlocImpl implements HomeBloc {
         predictedNumber,
       );
       final isNumberGuessed = blocCheckUseCase.call(checkParams);
-      final attempts = _state.attempts + 1;
+      final attempts = _state.attempts ++;
       final checkAttempts =
           attempts >= maxAttempts ? GameState.lose : GameState.inGame;
       final gameState = isNumberGuessed ? GameState.win : checkAttempts;

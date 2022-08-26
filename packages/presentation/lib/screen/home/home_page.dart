@@ -35,7 +35,10 @@ class _HomePageState extends BlocScreenState<HomePage, HomeBloc> {
   late TextEditingController _controller;
 
   _HomePageState()
-      : super(HomeBloc(GenerateNumberUseCase(), CheckNumberUseCase()));
+      : super(HomeBloc(
+          GenerateNumberUseCase(),
+          CheckNumberUseCase(),
+        ));
 
   @override
   void initState() {
