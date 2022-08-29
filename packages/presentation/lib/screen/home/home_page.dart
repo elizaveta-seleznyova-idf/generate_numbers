@@ -86,9 +86,8 @@ class _HomePageState extends BlocScreenState<HomePage, HomeBloc> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    blocData.generatedNumber != null
-                        ? Text('Random number: ${blocData.generatedNumber}')
-                        : const SizedBox(),
+                    if (blocData.generatedNumber != null)
+                      Text('Random number: ${blocData.generatedNumber}'),
                     const Text(
                       'Try to predict generated number:',
                       style: TextStyle(fontSize: 20),
@@ -128,12 +127,11 @@ class _HomePageState extends BlocScreenState<HomePage, HomeBloc> {
                         ),
                       ],
                     ),
-                    blocData.attempts >= 1
-                        ? Text(
-                            'Try again. You have ${3 - blocData.attempts} more attempts',
-                            style: const TextStyle(fontSize: 15),
-                          )
-                        : const SizedBox(),
+                    if (blocData.attempts >= 1)
+                      Text(
+                        'Try again. You have ${3 - blocData.attempts} more attempts',
+                        style: const TextStyle(fontSize: 15),
+                      ),
                   ],
                 ),
               ),
