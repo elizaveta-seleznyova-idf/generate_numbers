@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends BlocScreen {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
@@ -32,8 +32,6 @@ class HomePage extends BlocScreen {
 }
 
 class _HomePageState extends BlocScreenState<HomePage, HomeBloc> {
-  late TextEditingController _controller;
-
   _HomePageState()
       : super(HomeBloc(
           GenerateNumberUseCase(),
@@ -43,7 +41,6 @@ class _HomePageState extends BlocScreenState<HomePage, HomeBloc> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController();
     bloc.dialogStream.listen(
       (event) {
         if (event is GameAlertDialog) {
@@ -67,18 +64,12 @@ class _HomePageState extends BlocScreenState<HomePage, HomeBloc> {
   }
 
   @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
+    return StreamBuilder<BlocState>(
       stream: bloc.dataStream,
       builder: (context, snapshot) {
-        if (snapshot.data != null) {
-          final data = snapshot.data as BlocState;
+        final data = snapshot.data;
+        if (data != null) {
           final HomeState? blocData = data.data;
 
           if (blocData == null) {
@@ -106,13 +97,13 @@ class _HomePageState extends BlocScreenState<HomePage, HomeBloc> {
                     TextFormField(
                       keyboardType: TextInputType.number,
                       maxLength: 1,
-                      controller: _controller,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Number?',
                       ),
                       onChanged: (value) {
                         bloc.changeSubmitButton(value.isNotEmpty);
+                        bloc.setNumber(value);
                       },
                     ),
                     const SizedBox(height: 15),
@@ -131,9 +122,7 @@ class _HomePageState extends BlocScreenState<HomePage, HomeBloc> {
                           onPressed: !blocData.isSubmitButtonActive
                               ? null
                               : () {
-                                  final result = _controller.text;
-                                  final int resultSubmit = int.parse(result);
-                                  bloc.submit(resultSubmit);
+                                  bloc.submit();
                                 },
                           child: const Text('Submit'),
                         ),

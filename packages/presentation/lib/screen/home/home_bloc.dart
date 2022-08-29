@@ -10,17 +10,22 @@ import 'package:presentation/screen/home/home_state.dart';
 abstract class HomeBloc extends Bloc {
   factory HomeBloc(GenerateNumberUseCase generateNumberUseCase,
           CheckNumberUseCase checkNumberUseCase) =>
-      HomeBlocImpl(generateNumberUseCase, checkNumberUseCase);
+      HomeBlocImpl(
+        generateNumberUseCase,
+        checkNumberUseCase,
+      );
 
   void generate();
 
-  void submit(int predictedNumber);
+  void submit();
 
   void changeSubmitButton(bool isSubmitButtonActive);
+
+  void setNumber(String text);
 }
 
 class HomeBlocImpl extends BlocImpl implements HomeBloc {
-  final _state = HomeState.init();
+  var _state = HomeState.init();
   final GenerateNumberUseCase blocGenerateUseCase;
   final CheckNumberUseCase blocCheckUseCase;
   final Random random = Random();
@@ -59,59 +64,69 @@ class HomeBlocImpl extends BlocImpl implements HomeBloc {
   @override
   void generate() {
     final generatedNumber = blocGenerateUseCase();
-    _state.generatedNumber = generatedNumber;
-    _state.attempts = nullingAttempts;
-    _state.gameState = GameState.inGame;
+    _state = _state.copyWith(
+      generatedNumber: generatedNumber,
+      attempts: nullingAttempts,
+      gameState: GameState.inGame,
+    );
     _updateData(
       data: _state,
     );
   }
 
   @override
-  void submit(int predictedNumber) {
-    if (_state.generatedNumber != null) {
+  void submit() {
+    final generatedNumber = _state.generatedNumber;
+    if (generatedNumber != null) {
       final checkParams = CheckNumberParams(
-        _state.generatedNumber!,
-        predictedNumber,
+        generatedNumber,
+        _state.predictedNumber ?? 0,
       );
-      final isNumberGuessed = blocCheckUseCase.call(checkParams);
-      final attempts = _state.attempts ++;
+      final isNumberGuessed = blocCheckUseCase(checkParams);
+      final attempts = _state.attempts + 1;
       final checkAttempts =
           attempts >= maxAttempts ? GameState.lose : GameState.inGame;
       final gameState = isNumberGuessed ? GameState.win : checkAttempts;
 
-      if (gameState == GameState.lose) {
-        const String blocTitleText = 'You lose!';
-        const String blocContentText = 'The attempts are over. Try again!';
-        const String blocButtonText = 'Ok :(';
-        _showDialog(
-          buttonText: blocButtonText,
-          titleText: blocTitleText,
-          contentText: blocContentText,
-        );
-      } else if (gameState == GameState.win) {
-        const String blocTitleText = 'You won!';
-        final String blocContentText = 'The number was : ${_state.generatedNumber}';
-        const String blocButtonText ='Generate new number';
-        _showDialog(
-          buttonText: blocButtonText,
-          titleText: blocTitleText,
-          contentText: blocContentText,
-        );
-      }
-      _state.attempts = attempts;
-      _state.gameState = gameState;
+      _showResultDialog(gameState: gameState);
+
+      _state = _state.copyWith(
+        attempts: attempts,
+        gameState: gameState,
+      );
+
       _updateData(
         data: _state,
       );
     }
   }
 
+  void _showResultDialog({required GameState gameState}) {
+    if (gameState == GameState.lose) {
+      _showDialog(
+        titleText: 'You lose!',
+        contentText: 'The attempts are over. Try again!',
+        buttonText: 'Ok :(',
+      );
+    } else if (gameState == GameState.win) {
+      _showDialog(
+        titleText: 'You won!',
+        contentText: 'The number was : ${_state.generatedNumber}',
+        buttonText: 'Generate new number',
+      );
+    }
+  }
+
   @override
   void changeSubmitButton(bool isSubmitButtonActive) {
-    _state.isSubmitButtonActive = isSubmitButtonActive;
+    _state = _state.copyWith(isSubmitButtonActive: isSubmitButtonActive);
     _updateData(
       data: _state,
     );
+  }
+
+  @override
+  void setNumber(String text) {
+    _state = _state.copyWith(predictedNumber: int.tryParse(text));
   }
 }
