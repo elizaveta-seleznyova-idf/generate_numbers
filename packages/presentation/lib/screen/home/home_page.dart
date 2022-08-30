@@ -42,16 +42,16 @@ class _HomePageState extends BlocScreenState<HomePage, HomeBloc> {
   void initState() {
     super.initState();
     bloc.dialogStream.listen(
-      (event) {
-        if (event is GameAlertDialog) {
+      (startNewGame) {
+        if (startNewGame is GameAlertDialog) {
           showDialog(
             context: context,
             barrierDismissible: false,
             builder: (context) {
               return ShowDialogWidget(
-                  titleText: event.titleText,
-                  contentText: event.contentText,
-                  buttonText: event.buttonText,
+                  titleText: startNewGame.titleText,
+                  contentText: startNewGame.contentText,
+                  buttonText: startNewGame.buttonText,
                   widgetFunction: () {
                     bloc.generate();
                     Navigator.of(context).pop();

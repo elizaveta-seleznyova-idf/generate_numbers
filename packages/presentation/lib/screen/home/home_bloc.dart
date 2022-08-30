@@ -8,8 +8,10 @@ import 'package:presentation/base/bloc.dart';
 import 'package:presentation/screen/home/home_state.dart';
 
 abstract class HomeBloc extends Bloc {
-  factory HomeBloc(GenerateNumberUseCase generateNumberUseCase,
-          CheckNumberUseCase checkNumberUseCase) =>
+  factory HomeBloc(
+    GenerateNumberUseCase generateNumberUseCase,
+    CheckNumberUseCase checkNumberUseCase,
+  ) =>
       HomeBlocImpl(
         generateNumberUseCase,
         checkNumberUseCase,
