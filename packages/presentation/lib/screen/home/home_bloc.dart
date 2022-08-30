@@ -5,16 +5,20 @@ import 'package:domain/usecase/check_number_usecase.dart';
 import 'package:domain/usecase/generate_number_usecase.dart';
 import 'package:presentation/base/game_alert_dialog.dart';
 import 'package:presentation/base/bloc.dart';
+import 'package:presentation/screen/data/DialogParams.dart';
+import 'package:presentation/screen/home/home_dialog_mapper.dart';
 import 'package:presentation/screen/home/home_state.dart';
 
 abstract class HomeBloc extends Bloc {
   factory HomeBloc(
     GenerateNumberUseCase generateNumberUseCase,
     CheckNumberUseCase checkNumberUseCase,
+    HomeDialogMapper dialogMapper,
   ) =>
       HomeBlocImpl(
         generateNumberUseCase,
         checkNumberUseCase,
+        dialogMapper,
       );
 
   void generate();
@@ -33,8 +37,13 @@ class HomeBlocImpl extends BlocImpl implements HomeBloc {
   final Random random = Random();
   final nullingAttempts = 0;
   final maxAttempts = 3;
+  final HomeDialogMapper _dialogMapper;
 
-  HomeBlocImpl(this.blocGenerateUseCase, this.blocCheckUseCase);
+  HomeBlocImpl(
+    this.blocGenerateUseCase,
+    this.blocCheckUseCase,
+    this._dialogMapper,
+  );
 
   @override
   void initState() {
@@ -50,15 +59,13 @@ class HomeBlocImpl extends BlocImpl implements HomeBloc {
   }
 
   _showDialog({
-    required String buttonText,
-    required String titleText,
-    required String contentText,
+    required DialogParams params,
   }) {
     showDialog(
       event: GameAlertDialog(
-        buttonText: buttonText,
-        titleText: titleText,
-        contentText: contentText,
+        buttonText: params.buttonText,
+        titleText: params.titleText,
+        contentText: params.contentText,
       ),
     );
   }
@@ -89,33 +96,22 @@ class HomeBlocImpl extends BlocImpl implements HomeBloc {
       final checkAttempts =
           attempts >= maxAttempts ? GameState.lose : GameState.inGame;
       final gameState = isNumberGuessed ? GameState.win : checkAttempts;
-
-      _showResultDialog(gameState: gameState);
-
       _state = _state.copyWith(
         attempts: attempts,
         gameState: gameState,
       );
-
       _updateData(
         data: _state,
       );
+      _showResultDialog(gameState: gameState);
     }
   }
 
   void _showResultDialog({required GameState gameState}) {
-    if (gameState == GameState.lose) {
-      _showDialog(
-        titleText: 'You lose!',
-        contentText: 'The attempts are over. Try again!',
-        buttonText: 'Ok :(',
-      );
-    } else if (gameState == GameState.win) {
-      _showDialog(
-        titleText: 'You won!',
-        contentText: 'The number was : ${_state.generatedNumber}',
-        buttonText: 'Generate new number',
-      );
+    DialogParams? params = _dialogMapper.mapDialogParams(_state);
+
+    if (params != null) {
+      _showDialog(params: params);
     }
   }
 
@@ -129,6 +125,8 @@ class HomeBlocImpl extends BlocImpl implements HomeBloc {
 
   @override
   void setNumber(String text) {
-    _state = _state.copyWith(predictedNumber: int.tryParse(text));
+    _state = _state.copyWith(
+      predictedNumber: int.tryParse(text),
+    );
   }
 }

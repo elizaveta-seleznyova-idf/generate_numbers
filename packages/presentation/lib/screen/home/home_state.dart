@@ -1,7 +1,6 @@
 enum GameState { inGame, lose, win }
 
 class HomeState {
-
   HomeState({
     this.generatedNumber,
     this.predictedNumber,
@@ -39,7 +38,7 @@ class HomeState {
   }) =>
       HomeState(
         generatedNumber: generatedNumber ?? this.generatedNumber,
-        predictedNumber:  predictedNumber ?? this.predictedNumber,
+        predictedNumber: predictedNumber ?? this.predictedNumber,
         attempts: attempts ?? this.attempts,
         isSubmitButtonActive: isSubmitButtonActive ?? this.isSubmitButtonActive,
         gameState: gameState ?? this.gameState,

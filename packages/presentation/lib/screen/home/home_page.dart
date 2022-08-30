@@ -1,5 +1,3 @@
-import 'package:domain/usecase/check_number_usecase.dart';
-import 'package:domain/usecase/generate_number_usecase.dart';
 import 'package:flutter/material.dart';
 import 'package:presentation/base/bloc_page.dart';
 import 'package:presentation/base/bloc_state.dart';
@@ -7,22 +5,6 @@ import 'package:presentation/base/game_alert_dialog.dart';
 import 'package:presentation/screen/home/home_bloc.dart';
 import 'package:presentation/screen/home/home_state.dart';
 import 'package:presentation/screen/home/show_dialog_widget.dart';
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Generate',
-      theme: ThemeData(
-        primarySwatch: Colors.teal,
-      ),
-      home: const HomePage(),
-    );
-  }
-}
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -32,11 +14,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends BlocScreenState<HomePage, HomeBloc> {
-  _HomePageState()
-      : super(HomeBloc(
-          GenerateNumberUseCase(),
-          CheckNumberUseCase(),
-        ));
+  _HomePageState() : super();
 
   @override
   void initState() {
@@ -127,7 +105,8 @@ class _HomePageState extends BlocScreenState<HomePage, HomeBloc> {
                         ),
                       ],
                     ),
-                    if (blocData.attempts >= 1)
+                    if (blocData.attempts >= 1 &&
+                        blocData.gameState == GameState.inGame)
                       Text(
                         'Try again. You have ${3 - blocData.attempts} more attempts',
                         style: const TextStyle(fontSize: 15),
