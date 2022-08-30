@@ -4,6 +4,7 @@ class HomeState {
   HomeState({
     this.generatedNumber,
     this.predictedNumber,
+    required this.isAttemptsTextAvailable,
     required this.attempts,
     required this.isSubmitButtonActive,
     required this.gameState,
@@ -12,6 +13,7 @@ class HomeState {
   final int? predictedNumber;
   final int? generatedNumber;
   final int attempts;
+  final bool isAttemptsTextAvailable;
   final bool isSubmitButtonActive;
   final GameState gameState;
 
@@ -19,12 +21,14 @@ class HomeState {
         attempts: 0,
         isSubmitButtonActive: false,
         gameState: GameState.inGame,
+        isAttemptsTextAvailable: false,
       );
 
   HomeState copy() => HomeState(
         generatedNumber: generatedNumber,
         predictedNumber: predictedNumber,
         attempts: attempts,
+        isAttemptsTextAvailable: isAttemptsTextAvailable,
         isSubmitButtonActive: isSubmitButtonActive,
         gameState: gameState,
       );
@@ -33,6 +37,7 @@ class HomeState {
     int? generatedNumber,
     int? predictedNumber,
     int? attempts,
+    bool? isAttemptsTextAvailable,
     bool? isSubmitButtonActive,
     GameState? gameState,
   }) =>
@@ -40,6 +45,8 @@ class HomeState {
         generatedNumber: generatedNumber ?? this.generatedNumber,
         predictedNumber: predictedNumber ?? this.predictedNumber,
         attempts: attempts ?? this.attempts,
+        isAttemptsTextAvailable:
+            isAttemptsTextAvailable ?? this.isAttemptsTextAvailable,
         isSubmitButtonActive: isSubmitButtonActive ?? this.isSubmitButtonActive,
         gameState: gameState ?? this.gameState,
       );

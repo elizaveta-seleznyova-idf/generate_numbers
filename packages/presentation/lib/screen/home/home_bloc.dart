@@ -28,6 +28,8 @@ abstract class HomeBloc extends Bloc {
   void changeSubmitButton(bool isSubmitButtonActive);
 
   void setNumber(String text);
+
+  void makeAttemptsTextAvailable(GameState gameState);
 }
 
 class HomeBlocImpl extends BlocImpl implements HomeBloc {
@@ -127,6 +129,24 @@ class HomeBlocImpl extends BlocImpl implements HomeBloc {
   void setNumber(String text) {
     _state = _state.copyWith(
       predictedNumber: int.tryParse(text),
+    );
+  }
+
+  @override
+  void makeAttemptsTextAvailable(GameState gameState) {
+    var attemptsTextAvailable = _state.isAttemptsTextAvailable;
+    if (_state.gameState == GameState.lose) {
+      attemptsTextAvailable = false;
+    } else if (_state.gameState == GameState.win) {
+      attemptsTextAvailable = false;
+    } else if (_state.gameState == GameState.inGame) {
+      attemptsTextAvailable = true;
+    }
+    _state = _state.copyWith(
+      isAttemptsTextAvailable: attemptsTextAvailable,
+    );
+    _updateData(
+      data: _state,
     );
   }
 }
