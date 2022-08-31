@@ -24,14 +24,6 @@ class HomeState {
         isAttemptsTextAvailable: false,
       );
 
-  HomeState copy() => HomeState(
-        generatedNumber: generatedNumber,
-        predictedNumber: predictedNumber,
-        attempts: attempts,
-        isAttemptsTextAvailable: isAttemptsTextAvailable,
-        isSubmitButtonActive: isSubmitButtonActive,
-        gameState: gameState,
-      );
 
   HomeState copyWith({
     int? generatedNumber,
