@@ -102,17 +102,17 @@ class _HomePageState extends BlocScreenState<HomePage, HomeBloc> {
                                   bloc.submit();
                                   bloc.makeAttemptsTextAvailable(
                                       blocData.gameState);
+                                  bloc.attemptsLeft(blocData.attempts);
                                 },
                           child: const Text('Submit'),
                         ),
                       ],
                     ),
-                    if (blocData.isAttemptsTextAvailable == true) ...[
+                    if (blocData.isAttemptsTextAvailable == true)
                       Text(
-                        'Try again. You have ${3 - blocData.attempts} more attempts',
+                        'Try again. You have ${blocData.leftAttempts} more attempts',
                         style: const TextStyle(fontSize: 15),
                       ),
-                    ],
                   ],
                 ),
               ),

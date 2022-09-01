@@ -5,7 +5,7 @@ import 'package:domain/usecase/check_number_usecase.dart';
 import 'package:domain/usecase/generate_number_usecase.dart';
 import 'package:presentation/base/game_alert_dialog.dart';
 import 'package:presentation/base/bloc.dart';
-import 'package:presentation/screen/data/DialogParams.dart';
+import 'package:presentation/screen/data/dialog_params.dart';
 import 'package:presentation/screen/home/home_dialog_mapper.dart';
 import 'package:presentation/screen/home/home_state.dart';
 
@@ -30,20 +30,22 @@ abstract class HomeBloc extends Bloc {
   void setNumber(String text);
 
   void makeAttemptsTextAvailable(GameState gameState);
+
+  void attemptsLeft(int attempts);
 }
 
 class HomeBlocImpl extends BlocImpl implements HomeBloc {
   var _state = HomeState.init();
-  final GenerateNumberUseCase blocGenerateUseCase;
-  final CheckNumberUseCase blocCheckUseCase;
+  final GenerateNumberUseCase _blocGenerateUseCase;
+  final CheckNumberUseCase _blocCheckUseCase;
   final Random random = Random();
   final nullingAttempts = 0;
   final maxAttempts = 3;
   final HomeDialogMapper _dialogMapper;
 
   HomeBlocImpl(
-    this.blocGenerateUseCase,
-    this.blocCheckUseCase,
+    this._blocGenerateUseCase,
+    this._blocCheckUseCase,
     this._dialogMapper,
   );
 
@@ -74,7 +76,7 @@ class HomeBlocImpl extends BlocImpl implements HomeBloc {
 
   @override
   void generate() {
-    final generatedNumber = blocGenerateUseCase();
+    final generatedNumber = _blocGenerateUseCase();
     _state = _state.copyWith(
       generatedNumber: generatedNumber,
       attempts: nullingAttempts,
@@ -93,7 +95,7 @@ class HomeBlocImpl extends BlocImpl implements HomeBloc {
         generatedNumber,
         _state.predictedNumber ?? 0,
       );
-      final isNumberGuessed = blocCheckUseCase(checkParams);
+      final isNumberGuessed = _blocCheckUseCase(checkParams);
       final attempts = _state.attempts + 1;
       final checkAttempts =
           attempts >= maxAttempts ? GameState.lose : GameState.inGame;
@@ -135,15 +137,25 @@ class HomeBlocImpl extends BlocImpl implements HomeBloc {
   @override
   void makeAttemptsTextAvailable(GameState gameState) {
     var attemptsTextAvailable = _state.isAttemptsTextAvailable;
-    if (_state.gameState == GameState.lose) {
-      attemptsTextAvailable = false;
-    } else if (_state.gameState == GameState.win) {
+    if (_state.gameState == GameState.lose ||
+        _state.gameState == GameState.win) {
       attemptsTextAvailable = false;
     } else if (_state.gameState == GameState.inGame) {
       attemptsTextAvailable = true;
     }
     _state = _state.copyWith(
       isAttemptsTextAvailable: attemptsTextAvailable,
+    );
+    _updateData(
+      data: _state,
+    );
+  }
+
+  @override
+  void attemptsLeft(int attempts) {
+    final leftAttempts = maxAttempts - _state.attempts;
+    _state = _state.copyWith(
+      leftAttempts: leftAttempts,
     );
     _updateData(
       data: _state,

@@ -4,6 +4,7 @@ class HomeState {
   HomeState({
     this.generatedNumber,
     this.predictedNumber,
+    this.leftAttempts,
     required this.isAttemptsTextAvailable,
     required this.attempts,
     required this.isSubmitButtonActive,
@@ -13,6 +14,7 @@ class HomeState {
   final int? predictedNumber;
   final int? generatedNumber;
   final int attempts;
+  final int? leftAttempts;
   final bool isAttemptsTextAvailable;
   final bool isSubmitButtonActive;
   final GameState gameState;
@@ -29,6 +31,7 @@ class HomeState {
     int? generatedNumber,
     int? predictedNumber,
     int? attempts,
+    int? leftAttempts,
     bool? isAttemptsTextAvailable,
     bool? isSubmitButtonActive,
     GameState? gameState,
@@ -36,6 +39,7 @@ class HomeState {
       HomeState(
         generatedNumber: generatedNumber ?? this.generatedNumber,
         predictedNumber: predictedNumber ?? this.predictedNumber,
+        leftAttempts: leftAttempts ?? this.leftAttempts,
         attempts: attempts ?? this.attempts,
         isAttemptsTextAvailable:
             isAttemptsTextAvailable ?? this.isAttemptsTextAvailable,

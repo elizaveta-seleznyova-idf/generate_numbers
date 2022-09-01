@@ -1,4 +1,4 @@
-import 'package:presentation/screen/data/DialogParams.dart';
+import 'package:presentation/screen/data/dialog_params.dart';
 import 'package:presentation/screen/home/home_state.dart';
 
 abstract class HomeDialogMapper {
