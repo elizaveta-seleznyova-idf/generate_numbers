@@ -32,12 +32,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends BlocScreenState<HomePage, HomeBloc> {
-  _HomePageState()
-      : super(HomeBloc(
-          GenerateNumberUseCase(),
-          CheckNumberUseCase(),
-        ));
-
   @override
   void initState() {
     super.initState();

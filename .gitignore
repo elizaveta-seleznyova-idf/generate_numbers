@@ -31,7 +31,8 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
-
+/packages/presentation/lib/di/presentation.config.dart
+/packages/domain/lib/di/domain_injector.config.dart
 # Web related
 lib/generated_plugin_registrant.dart
 

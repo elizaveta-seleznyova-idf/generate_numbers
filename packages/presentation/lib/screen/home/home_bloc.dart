@@ -6,8 +6,11 @@ import 'package:domain/usecase/generate_number_usecase.dart';
 import 'package:presentation/base/game_alert_dialog.dart';
 import 'package:presentation/base/bloc.dart';
 import 'package:presentation/screen/home/home_state.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 abstract class HomeBloc extends Bloc {
+  @factoryMethod
   factory HomeBloc(
     GenerateNumberUseCase generateNumberUseCase,
     CheckNumberUseCase checkNumberUseCase,
