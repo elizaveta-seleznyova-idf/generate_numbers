@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:presentation/screen/home/home_page.dart';
+import 'package:generate_numbers/di/app_injector.dart';
+import 'package:presentation/screen/generate_numbers_app.dart';
 
 void main() {
-  runApp(const MyApp());
+  initAppInjector();
+  runApp(const GenerateNumbersApp());
 }
